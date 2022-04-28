@@ -9,15 +9,15 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-//nombre de la clase
+/* Materia: desarrollo de software III
+ * Profesor: Andy Gomez de la Torre
+ * Nombre del Proyecto: P4EJmastino
+ * Programador: Jordy Mastino
+ * Descripción del Programa: para la realizacion de la practica cuatro implementa la resolucion de la ecuación cuadratica 
+ */
+
 public class pantallaprincipal extends JFrame {
 
-	/*
-	 * las variables que necesitaremos son las de entrada a,b,c y las raices de la ecuacion cuadratica x1,x2 manejaremos cuando el factor determinante 
-	 * donde la parabola no toca la linea de las abscisas solo una x
-	 * 
-	 */
-	
 	private JPanel contentPane;
 	private JTextField tf_a;
 	private JTextField tf_b;
@@ -31,8 +31,8 @@ public class pantallaprincipal extends JFrame {
 	private JButton btn_limpiar;
 	private JButton btn_salir;
 
-	/**
-	 * main de la aplicación.
+	/*
+	 * invoca el inicio de la aplicacion
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -47,8 +47,8 @@ public class pantallaprincipal extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
+	/*
+	 * Crea el Frame de Ventana
 	 */
 	public pantallaprincipal() {
 		setResizable(false);
@@ -59,9 +59,8 @@ public class pantallaprincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel(" Introduce de acuerdo a la una ecuacion cuadratica.");
-		lblNewLabel.setBounds(0, 0, 382, 14);
+		JLabel lblNewLabel = new JLabel(" Introduce de acuerdo a una ecuacion cuadratica, los campos requeridos.");
+		lblNewLabel.setBounds(0, 0, 424, 14);
 		contentPane.add(lblNewLabel);
 		
 		tf_a = new JTextField();
@@ -80,12 +79,12 @@ public class pantallaprincipal extends JFrame {
 		tf_c.setColumns(10);
 		
 		lblNewLabel_3 = new JLabel("Introduce coeficiente:");
-		lblNewLabel_3.setBounds(10, 27, 117, 20);
+		lblNewLabel_3.setBounds(10, 27, 141, 20);
 		contentPane.add(lblNewLabel_3);
 		
 		tf_result = new JTextField();
 		tf_result.setEditable(false);
-		tf_result.setBounds(148, 100, 220, 20);
+		tf_result.setBounds(10, 131, 414, 43);
 		contentPane.add(tf_result);
 		tf_result.setColumns(10);
 		
@@ -110,14 +109,24 @@ public class pantallaprincipal extends JFrame {
 				c=Double.parseDouble(tf_c.getText().trim());
 				MetodoNumEc mtd = new MetodoNumEc(a,b,c);
 				mtd.calc(a, b, c);
-				
+				tf_result.setText("El resultado es: \n"+mtd.getX1()+", "+mtd.getX2());
+				//llamo al atributo
 			}
 		});
-		btn_resolver.setBounds(10, 154, 128, 23);
+		btn_resolver.setBounds(10, 182, 128, 23);
 		contentPane.add(btn_resolver);
 		
 		btn_limpiar = new JButton("limpiar");
-		btn_limpiar.setBounds(148, 154, 89, 23);
+		btn_limpiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tf_a.setText("");
+				tf_b.setText("");
+				tf_c.setText("");
+				tf_result.setText("");
+				tf_a.requestFocus();
+			}
+		});
+		btn_limpiar.setBounds(148, 182, 89, 23);
 		contentPane.add(btn_limpiar);
 		
 		btn_salir = new JButton("Salir");
@@ -126,7 +135,7 @@ public class pantallaprincipal extends JFrame {
 				System.exit(0);
 			}
 		});
-		btn_salir.setBounds(247, 154, 89, 23);
+		btn_salir.setBounds(247, 182, 89, 23);
 		contentPane.add(btn_salir);
 	}
 }
