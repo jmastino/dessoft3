@@ -104,7 +104,12 @@ public class pantallaprincipal extends JFrame {
 		btn_resolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				double a,b,c;
+			try {
 				a=Double.parseDouble(tf_a.getText().trim());
+			} catch (Exception e2) {
+				throw new NumberFormatException("revise la sintaxis introducida");
+			}	
+				
 				b=Double.parseDouble(tf_b.getText().trim());
 				c=Double.parseDouble(tf_c.getText().trim());
 				MetodoNumEc mtd = new MetodoNumEc(a,b,c);
