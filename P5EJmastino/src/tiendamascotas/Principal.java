@@ -14,28 +14,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
+import javax.swing.JTextArea;
 
 
 /* Materia: desarrollo de software III
  * Profesor: Andy Gomez de la Torre
  * Nombre del Proyecto: P5EJmastino
  * Programador: Jordy Mastino
- * Descripción del Programa: para la realizacion de la practica cinco implementa POO, herencia, interfaz y contiene un metodo que comparten los objetos pero que son distintos
+ * Descripción del Programa: para la realizacion de la practica cinco implementa POO, herencia, interfaz y contiene un metodo 
+ * que comparten los objetos pero que son distintos para cada objeto
  * los objetos tienen sus atributos caracteristicos 
  */
 
 public class Principal extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextArea TFresult;
 	private JTextField tfnombremascota;
 	private JTextField tfedadmascota;
 	private JTextField tfcolormascota;
 	private JTextField tf_peso_alturasalto;
 	private JTextField tf_muerde_longitud_salto;
-
+	Gato gat = new Gato();
+	Perro per = new Perro();
+	
 	/**
-	 * inicio de la aplicacion
+	 * Inicio de la aplicacion
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -51,7 +55,7 @@ public class Principal extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Crea la Ventana de Frame.
 	 */
 	public Principal() {
 		
@@ -108,7 +112,6 @@ public class Principal extends JFrame {
 		tf_peso_alturasalto.setEditable(false);
 		tf_peso_alturasalto.setBounds(10, 192, 164, 20);
 		contentPane.add(tf_peso_alturasalto);
-	//	tf_peso_alturasalto.setColumns(10);
 		
 		tf_muerde_longitud_salto = new JTextField();
 		tf_muerde_longitud_salto.setRequestFocusEnabled(false);
@@ -117,7 +120,6 @@ public class Principal extends JFrame {
 		tf_muerde_longitud_salto.setEditable(false);
 		tf_muerde_longitud_salto.setBounds(10, 223, 164, 20);
 		contentPane.add(tf_muerde_longitud_salto);
-	//	tf_muerde_longitud_salto.setColumns(10);
 		
 		JComboBox animal = new JComboBox();
 		animal.setModel(new DefaultComboBoxModel(new String[] {"Perro", "Gato"}));
@@ -138,28 +140,24 @@ public class Principal extends JFrame {
 		});
 		contentPane.add(animal);
 		
-		JButton btnActualizar = new JButton("Mostrar Información");
-		btnActualizar.setBounds(213, 250, 161, 23);
-		contentPane.add(btnActualizar);
-		
 		JLabel lblSeleccioneSuCategora = new JLabel("Seleccione su categoría:");
 		lblSeleccioneSuCategora.setBounds(10, 44, 144, 14);
 		contentPane.add(lblSeleccioneSuCategora);
 		
-		JLabel lblSeleccioneSuRaza = new JLabel("Seleccione su Raza:");
+		JLabel lblSeleccioneSuRaza = new JLabel("Seleccione su raza:");
 		lblSeleccioneSuRaza.setBounds(10, 77, 144, 14);
 		contentPane.add(lblSeleccioneSuRaza);
 		
-		textField = new JTextField();
-		textField.setBackground(Color.WHITE);
-		textField.setRequestFocusEnabled(false);
-		textField.setFocusable(false);
-		textField.setEditable(false);
-		textField.setBounds(10, 284, 362, 101);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		TFresult = new JTextArea();
+		TFresult.setBackground(Color.WHITE);
+		TFresult.setRequestFocusEnabled(false);
+		TFresult.setFocusable(false);
+		TFresult.setEditable(false);
+		TFresult.setBounds(10, 284, 362, 101);
+		contentPane.add(TFresult);
+		TFresult.setColumns(10);
 		
-		JLabel lblnombremascota = new JLabel("Introduzca el Nombre de la mascota:");
+		JLabel lblnombremascota = new JLabel("Introduzca el nombre de la mascota:");
 		lblnombremascota.setBounds(10, 108, 217, 14);
 		contentPane.add(lblnombremascota);
 		
@@ -194,5 +192,66 @@ public class Principal extends JFrame {
 		tfmuerde_longitudsaltoinput.setBounds(184, 223, 85, 22);
 		contentPane.add(tfmuerde_longitudsaltoinput);
 		
+		JButton btnmostrarinfo = new JButton("Mostrar Información");
+		btnmostrarinfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			if(animal.getSelectedItem().toString().equalsIgnoreCase("Perro")) 
+			{
+				
+				if(tfmuerde_longitudsaltoinput.toString().equalsIgnoreCase("si")) {
+					per.setMuerde(true);
+				}
+				else if(tfmuerde_longitudsaltoinput.toString().equalsIgnoreCase("sí"))
+				{
+					per.setMuerde(true);
+				}
+				else if (tfmuerde_longitudsaltoinput.toString().equalsIgnoreCase("no")) 
+				{per.setMuerde(false);}
+				
+				per.setNombre(tfnombremascota.getText().toString());
+				per.setEdad(tfedadmascota.getText().toString());
+				per.setColor(tfcolormascota.getText().toString());
+				per.setTamano(categoriaanimal.getSelectedItem().toString());
+				per.setRaza(razacombobox.getSelectedItem().toString());
+				per.setPeso(Float.parseFloat(tfpesoalturainput.getText()));
+				
+				TFresult.setText(per.mostraratr());
+			}
+			if(animal.getSelectedItem().toString().equalsIgnoreCase("Gato"))
+			{
+				gat.setNombre(tfnombremascota.getText().toString());
+				gat.setEdad(tfedadmascota.getText().toString());
+				gat.setColor(tfcolormascota.getText().toString());
+				gat.setCategoria(categoriaanimal.getSelectedItem().toString());
+				gat.setRaza(razacombobox.getSelectedItem().toString());
+				gat.setAlturasalto(Float.parseFloat(tfpesoalturainput.getText()));
+				gat.setLongitudsalto(Float.parseFloat(tfmuerde_longitudsaltoinput.getText()));
+				
+				TFresult.setText(gat.mostraratributos());
+			}
+			
+			
+			}
+		});
+		btnmostrarinfo.setBounds(20, 250, 154, 23);
+		contentPane.add(btnmostrarinfo);
+		
+		
+		JButton btnsonido = new JButton("Mostrar Sonido");
+		btnsonido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+		{
+			if(animal.getSelectedItem().toString().equalsIgnoreCase("Perro"))
+			{
+				TFresult.setText(per.Sonido());
+			}
+			else 
+			{
+				TFresult.setText(gat.Sonido());
+			}
+		}
+			});
+		btnsonido.setBounds(213, 250, 161, 23);
+		contentPane.add(btnsonido);
 	}
-}
+	}
