@@ -1,7 +1,6 @@
 package registromed;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,14 +10,12 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class VentanaF extends JFrame {
 
@@ -34,7 +31,7 @@ public class VentanaF extends JFrame {
 	/**
 	 * lanza la aplcación
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -55,7 +52,6 @@ public class VentanaF extends JFrame {
 	public VentanaF() {
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaF.class.getResource("/registromed/img_493345.png")));
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		setTitle("Registro medicos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -133,23 +129,16 @@ public class VentanaF extends JFrame {
 		btneliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manejoarchivo mng = new manejoarchivo();
-//				mng.registrarenarchivo();
 				
-				try {
-					
-					String idcedula= tfcedula.getText();
-					String nombre = tfnombre.getText();
-					String apellido= tfapellido.getText();
-					String	direccion= tfdireccion.getText();
-					String especialidad= tfespecialidad.getText();
-					Date fechainiciolabor= sdf.parse(tfechainiciolabores.getText());
-					boolean esborrado= true;
-					
-				mng.borradologico(idcedula, nombre, apellido, direccion, especialidad,fechainiciolabor, esborrado);	
+				String idcedula= tfcedula.getText();
+				String nombre = tfnombre.getText();
+				String apellido= tfapellido.getText();
+				String	direccion= tfdireccion.getText();
+				String especialidad= tfespecialidad.getText();
+				String fechainiciolabor= tfechainiciolabores.getText();
+				boolean esborrado= true;
 				
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
+				mng.borradologico(idcedula, nombre, apellido, direccion, especialidad,fechainiciolabor, esborrado);
 				mng.registrarenarchivo();
 			
 			
@@ -178,13 +167,9 @@ public class VentanaF extends JFrame {
 		btnactualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manejoarchivo mng = new manejoarchivo();
-				mng.registrarenarchivo();
-				try {
-					int indice= mng.buscarregistro(tfcedula.getText());
-					mng.arrlist.set(indice,new Medicos(tfcedula.getText(),tfnombre.getText(),tfapellido.getText(),tfdireccion.getText(),tfespecialidad.getText(),sdf.parse(tfechainiciolabores.getText()),false));
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
+				
+				int indice= mng.buscarregistro(tfcedula.getText().toString());
+				mng.arrlist.set(indice,new Medicos(tfcedula.getText(),tfnombre.getText(),tfapellido.getText(),tfdireccion.getText(),tfespecialidad.getText(),tfechainiciolabores.getText(),false));
 				mng.registrarenarchivo();
 				JOptionPane.showMessageDialog(btnactualizar, "Registro Actualizado");
 			}
@@ -206,22 +191,18 @@ public class VentanaF extends JFrame {
 		btncrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manejoarchivo mng = new manejoarchivo();
-				mng.registrarenarchivo();
+				
 				
 				tfestado.setText("");
 				
 				int indice = mng.buscarregistro(tfcedula.getText());
 				
-				if(indice==-1) {
+				if(indice==(-1)) {
 			
-					try {
-						mng.arrlist.add(new Medicos(tfcedula.getText().toString(),tfnombre.getText().toString(),tfapellido.getText().toString(),tfdireccion.getText().toString(),tfespecialidad.getText().toString(),sdf.parse(tfechainiciolabores.getText()),false));
-						//llamamos este metodo porque solo hemos enviado los atributos al metodo sin escribir en un fichero a guardar los datos.
-						mng.registrarenarchivo();
-						JOptionPane.showMessageDialog(btncrear, "Registro creado");
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
+					mng.arrlist.add(new Medicos(tfcedula.getText().toString(),tfnombre.getText().toString(),tfapellido.getText().toString(),tfdireccion.getText().toString(),tfespecialidad.getText().toString(),tfechainiciolabores.getText(),false));
+					//llamamos este metodo porque solo hemos enviado los atributos al metodo sin escribir en un fichero a guardar los datos.
+					mng.registrarenarchivo();
+					JOptionPane.showMessageDialog(btncrear, "Registro creado");
 					
 						
 				}
@@ -238,7 +219,7 @@ public class VentanaF extends JFrame {
 						tfapellido.setText(mng.arrlist.get(indice).getApellido());
 						tfdireccion.setText(mng.arrlist.get(indice).getDireccion());
 						tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
-						tfechainiciolabores.setText(sdf.format(mng.arrlist.get(indice).getFechainiciolabor()));
+						tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
 						tfestado.setText("¡Recuerde guardar con el boton actualizar!");
 						}
 						
@@ -283,7 +264,7 @@ public class VentanaF extends JFrame {
 							tfapellido.setText(mng.arrlist.get(indice).getApellido());
 							tfdireccion.setText(mng.arrlist.get(indice).getDireccion());
 							tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
-							tfechainiciolabores.setText(sdf.format(mng.arrlist.get(indice).getFechainiciolabor().toString()));
+							tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
 							tfestado.setText("¡Recuerde guardar con el boton actualizar!");
 							break;
 						}
@@ -340,9 +321,8 @@ public class VentanaF extends JFrame {
 			tfestado.setText("");
 			
 			if(mng.existearchivo()==true) {
-			
 				
-				int indice = mng.buscarregistro(tfcedula.getText());
+				int indice = mng.buscarregistro(tfcedula.getText().toString());
 			if(indice==-1) {
 					JOptionPane.showConfirmDialog(btnbuscar, "elemento no encontrado, mejor cree este registro");
 							}
@@ -359,13 +339,12 @@ public class VentanaF extends JFrame {
 					tfapellido.setText(mng.arrlist.get(indice).getApellido());
 					tfdireccion.setText(mng.arrlist.get(indice).getDireccion());
 					tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
-					
-					tfechainiciolabores.setText(sdf.format(mng.arrlist.get(indice).getFechainiciolabor()));
+					tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
 					tfestado.setText("al modificar algo presione el boton actualizar, sino no haga nada");
 				}
 				
 			}
-			}else {tfestado.setText("archivo no encontrado");}
+			}else {tfestado.setText("archivo no encontrado, rellena el formulario y crea un nuevo registro");}
 			}
 		//finaccion btnbuscar
 			});

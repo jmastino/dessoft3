@@ -3,25 +3,10 @@ package registromed;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class manejoarchivo {
-/*
-	
-	String idcedula;
-	String newidcedula;
-	
-	String nombre;
-	String apellido;
-	String direccion;
-	String especialidad;
-	String fechainiciolabor;
-	//formato dd/mm/aaaa
-	boolean esborrado;
-	//esta variable controla si es borrado por el objetivo de un  borrado lógico y no fisico de la aplicacion
-	//requerimiento al valor true es porque ha sido eliminado
-	*/
+
 	SimpleDateFormat sdf = new SimpleDateFormat();
 	
 	public ArrayList<Medicos> arrlist = new ArrayList<Medicos>();
@@ -79,26 +64,27 @@ public class manejoarchivo {
 				// SINO EXISTE crea el nuevo archivo
 				file.createNewFile();
 			}
-		RandomAccessFile archivo = new RandomAccessFile(file,"rw");			
+			
+			manejoarchivo mng = new manejoarchivo();
+			if(mng.existearchivo()==true) {
+				PrintWriter archivo = new PrintWriter(file,"UTF-8");			
+				
+				for(Medicos reg : arrlist) {
+					
+	archivo.println(reg.getIdcedula()+";"+reg.getNombre()+";"+reg.getApellido()+";"+reg.getDireccion()+";"+reg.getEspecialidad()+";"+reg.getFechainiciolabor()+";"+reg.isEsborrado());
+				}
+				
+				archivo.close();
+			}
+			else {
+				mng.creararchivo();
+				mng.registrarenarchivo();
+			}
 		
-		for(Medicos reg : arrlist) {
-		writeString(archivo,reg.getIdcedula()+";",64);
-		archivo.writeChars(reg.nombre+";");
-		archivo.writeChars(reg.apellido+";");
-		archivo.writeChars(reg.direccion+";");
-		archivo.writeChars(reg.especialidad+";");
-		archivo.writeChars(reg.fechainiciolabor.toString());
-		archivo.writeChars(";");
-		archivo.writeBoolean(reg.esborrado);
-		archivo.writeChars(";");
-		}
-		archivo.close();
 		
 	} catch (Exception e){
 		e.printStackTrace();
 	}
-		
-	
 	}	
 	
 		
@@ -106,41 +92,58 @@ public class manejoarchivo {
 	public int buscarregistro(String idcedula) {
 		//aqui solo muestra los que no contienen borrado logico
 		int scan=0;
-		try {
+		
 		manejoarchivo mng = new manejoarchivo();
 		
 		if(mng.existearchivo()==true) {
-				BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
+			try {
+			BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
 				String line = archivo.readLine();
+				
+				if(line==null) {
+					arrlist.add(new Medicos("0-00-0000", "base","base", "base", "base", "00-00-0000", true));
+					mng.registrarenarchivo();
+				}
 				while(line!=null) {
 					String[] campos = line.split(";");
-					arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), sdf.parse(campos[5]), Boolean.parseBoolean(campos[6])));
+					arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), campos[5], Boolean.parseBoolean(campos[6])));
 				}
-				
-				
 				
 				for(int i=0;i<arrlist.size();i++) 
-				{
-				if(arrlist.get(i).getIdcedula().equals(idcedula))
-				{
+				{  
+					if(arrlist.get(i).getIdcedula().equals(idcedula)==true)
+					{
 					scan=i;
-					break;
-				}
-				else{scan=-1;}
+				
+					}
+					else{scan=-1;}
 				
 				}
+				
+				mng.registrarenarchivo();
 				archivo.close();
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+				
 				}
 		else {
 		mng.creararchivo();
+		arrlist.add(new Medicos("", "","", "", "", "", true));
+		
+		try {
 		BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
 		archivo.close();
-		scan=-1;
-				}
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		scan=-1;
+				}
+		
+		
+		
 		return scan;
 	}
 	
@@ -149,22 +152,31 @@ public class manejoarchivo {
 	/**
 	 * metodo para hacer la operacion de borrado logico
 	 */
-	public void borradologico(String idcedula,String nombre, String apellido, String direccion,String especialidad,Date fechainiciolabor,boolean esborrado) {
+	public void borradologico(String idcedula,String nombre, String apellido, String direccion,String especialidad,String fechainiciolabor,boolean esborrado) {
 		//en la operacion borrado logico es lo mas normal que aunque borre
 		int scan=0;
 		try {
 		manejoarchivo mng = new manejoarchivo();
 		if(mng.existearchivo()==true) {
-		BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
-		String line = archivo.readLine();
-		while(line!=null) {
-			String[] campos = line.split(";");
-			arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), sdf.parse(campos[5]), Boolean.parseBoolean(campos[6])));
-		}
-		scan = arrlist.indexOf(idcedula);
-		arrlist.set(scan, new Medicos(idcedula,nombre,apellido,direccion,especialidad,fechainiciolabor,true));
-		mng.registrarenarchivo();
-		archivo.close();
+			BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
+			String line = archivo.readLine();
+			while(line!=null) {
+				String[] campos = line.split(";");
+				arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), campos[5], Boolean.parseBoolean(campos[6])));
+			}
+
+			for(int i=0;i<arrlist.size();i++) 
+			{
+				if(arrlist.get(i).getIdcedula().equals(idcedula))
+				{
+					scan=i;
+					break;
+				}
+				else{scan=-1;}
+			}
+			arrlist.set(scan, new Medicos(idcedula,nombre,apellido,direccion,especialidad,fechainiciolabor,true));
+			mng.registrarenarchivo();
+			archivo.close();
 		}
 		else {scan=-1;}
 		}

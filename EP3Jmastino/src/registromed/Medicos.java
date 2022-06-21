@@ -1,19 +1,18 @@
 package registromed;
-import java.util.Date;
 public class Medicos extends idcedulas{
 
 	String nombre;
 	String apellido;
 	String direccion;
 	String especialidad;
-	Date fechainiciolabor;
+	String fechainiciolabor;
 	//formato dd/mm/aaaa
 	boolean esborrado;
 	//esta variable controla si es borrado por el objetivo de un  borrado lógico y no fisico de la aplicacion
 	//requerimiento al valor true es porque ha sido eliminado
 	
 	
-	public Medicos(String idcedula,String nombre,String apellido,String direccion,String especialidad,Date fechainiciolabor,boolean esborrado) {
+	public Medicos(String idcedula,String nombre,String apellido,String direccion,String especialidad,String fechainiciolabor,boolean esborrado) {
 		super(idcedula);
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -49,10 +48,10 @@ public class Medicos extends idcedulas{
 	public void setEspecialidad(String especialidad) {
 		this.especialidad = especialidad;
 	}
-	public Date getFechainiciolabor() {
+	public String getFechainiciolabor() {
 		return fechainiciolabor;
 	}
-	public void setFechainiciolabor(Date fechainiciolabor) {
+	public void setFechainiciolabor(String fechainiciolabor) {
 		this.fechainiciolabor = fechainiciolabor;
 	}
 	public boolean isEsborrado() {
