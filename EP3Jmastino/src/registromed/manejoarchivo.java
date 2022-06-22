@@ -1,13 +1,11 @@
 package registromed;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
 public class manejoarchivo {
 
-	SimpleDateFormat sdf = new SimpleDateFormat();
 	
 	public ArrayList<Medicos> arrlist = new ArrayList<Medicos>();
 	
@@ -76,11 +74,6 @@ public class manejoarchivo {
 				
 				archivo.close();
 			}
-			else {
-				mng.creararchivo();
-				mng.registrarenarchivo();
-			}
-		
 		
 	} catch (Exception e){
 		e.printStackTrace();
@@ -92,57 +85,46 @@ public class manejoarchivo {
 	public int buscarregistro(String idcedula) {
 		//aqui solo muestra los que no contienen borrado logico
 		int scan=0;
-		
 		manejoarchivo mng = new manejoarchivo();
 		
 		if(mng.existearchivo()==true) {
 			try {
 			BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
-				String line = archivo.readLine();
 				
-				if(line==null) {
-					arrlist.add(new Medicos("0-00-0000", "base","base", "base", "base", "00-00-0000", true));
-					mng.registrarenarchivo();
-				}
-				while(line!=null) {
+			String line = archivo.readLine();
+								
+			if(line==null) {
+				scan=-1;
+			}	
+			
+			while(line!=null) {
 					String[] campos = line.split(";");
 					arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), campos[5], Boolean.parseBoolean(campos[6])));
+					line = archivo.readLine();
 				}
 				
 				for(int i=0;i<arrlist.size();i++) 
 				{  
-					if(arrlist.get(i).getIdcedula().equals(idcedula)==true)
-					{
-					scan=i;
-				
-					}
-					else{scan=-1;}
+					if(arrlist.get(i).getIdcedula().contains(idcedula))
+						{
+						scan=i;
+						break;
+						}
+						else{scan=-1;
+						
+						}
 				
 				}
-				
-				mng.registrarenarchivo();
 				archivo.close();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
 			}
-				
-				}
+			}
 		else {
-		mng.creararchivo();
-		arrlist.add(new Medicos("", "","", "", "", "", true));
-		
-		try {
-		BufferedReader archivo = new BufferedReader(new InputStreamReader(new FileInputStream("registro.csv"),"UTF-8"));
-		archivo.close();
+			mng.creararchivo();
+			scan=mng.buscarregistro(idcedula);
 		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		scan=-1;
-				}
-		
-		
 		
 		return scan;
 	}
@@ -163,11 +145,12 @@ public class manejoarchivo {
 			while(line!=null) {
 				String[] campos = line.split(";");
 				arrlist.add(new Medicos( campos[0].toString(), campos[1].toString(), campos[2].toString(), campos[3].toString(), campos[4].toString(), campos[5], Boolean.parseBoolean(campos[6])));
+				line = archivo.readLine();
 			}
 
 			for(int i=0;i<arrlist.size();i++) 
 			{
-				if(arrlist.get(i).getIdcedula().equals(idcedula))
+				if(arrlist.get(i).getIdcedula().contains(idcedula))
 				{
 					scan=i;
 					break;

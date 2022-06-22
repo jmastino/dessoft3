@@ -210,8 +210,9 @@ public class VentanaF extends JFrame {
 					if(indice!=-1) {
 					//permitete buscar cuando un elemento esta borrado e ingresarlo a la coleccion	
 					if(mng.arrlist.get(indice).isEsborrado()==true) {
+						
 						int input = JOptionPane.showConfirmDialog(null, "¡Su registro ha sido borrado! ", "escoga si desea actualizar",
-								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+								JOptionPane.YES_NO_OPTION , JOptionPane.QUESTION_MESSAGE);
 						switch(input) {
 						case 0:{
 						tfcedula.setText(mng.arrlist.get(indice).getIdcedula());
@@ -224,15 +225,6 @@ public class VentanaF extends JFrame {
 						}
 						
 						case 1:{
-							tfcedula.setText("");
-							tfnombre.setText("");
-							tfapellido.setText("");
-							tfdireccion.setText("");
-							tfespecialidad.setText("");
-							tfechainiciolabores.setText("");
-							tfestado.setText("");
-							break;}
-						case 2:{
 							tfcedula.setText("");
 							tfnombre.setText("");
 							tfapellido.setText("");
@@ -255,8 +247,8 @@ public class VentanaF extends JFrame {
 						
 					}
 					else {
-						int input = JOptionPane.showConfirmDialog(null, "¡Su registro existe! ", "escoga si desea actualizar guardar con boton actualizar",
-								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+						int input = JOptionPane.showConfirmDialog(null, "¡Su registro existe! escoga si desea actualizar ", "¡Su Registro Existe!",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 						switch(input) {
 						case 0:{
 							tfcedula.setText(mng.arrlist.get(indice).getIdcedula());
@@ -266,6 +258,7 @@ public class VentanaF extends JFrame {
 							tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
 							tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
 							tfestado.setText("¡Recuerde guardar con el boton actualizar!");
+							JOptionPane.showMessageDialog(btncrear, "¡Recuerde guardar con el boton actualizar!");
 							break;
 						}
 						case 1:{
@@ -278,24 +271,18 @@ public class VentanaF extends JFrame {
 							tfestado.setText("");
 							break;
 						}
-						case 2:{
-							tfcedula.setText("");
-							tfnombre.setText("");
-							tfapellido.setText("");
-							tfdireccion.setText("");
-							tfespecialidad.setText("");
-							tfechainiciolabores.setText("");
-							tfestado.setText("");
-							break;}
+						default: {tfcedula.setText("");
+						tfnombre.setText("");
+						tfapellido.setText("");
+						tfdireccion.setText("");
+						tfespecialidad.setText("");
+						tfechainiciolabores.setText("");
+						tfestado.setText("");
+						break;}
 						}
-					
 					}
-					
 					}
-					
-				
-				
-			JOptionPane.showMessageDialog(btncrear, "Registro Creado");
+							
 			}
 		}});
 		btncrear.setBounds(279, 25, 145, 23);
@@ -323,28 +310,32 @@ public class VentanaF extends JFrame {
 			if(mng.existearchivo()==true) {
 				
 				int indice = mng.buscarregistro(tfcedula.getText().toString());
-			if(indice==-1) {
-					JOptionPane.showConfirmDialog(btnbuscar, "elemento no encontrado, mejor cree este registro");
-							}
-			else {
-				
-				if(mng.arrlist.get(indice).esborrado==true) {
-					tfestado.setText("Registro eliminado");
-					JOptionPane.showMessageDialog(btnbuscar, "Editar los campos y despues recuerde guardar con el boton actualizar registro");
-															}
-				else {
-					JOptionPane.showConfirmDialog(btnbuscar, "podra visualizar lo buscado de la persona "+mng.arrlist.get(indice).getNombre()+ " , si modifica recuerde guardar con el boton actualizar registro");
-					tfcedula.setText(mng.arrlist.get(indice).getIdcedula());
-					tfnombre.setText(mng.arrlist.get(indice).getNombre());
-					tfapellido.setText(mng.arrlist.get(indice).getApellido());
-					tfdireccion.setText(mng.arrlist.get(indice).getDireccion());
-					tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
-					tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
-					tfestado.setText("al modificar algo presione el boton actualizar, sino no haga nada");
+				if(indice==-1) {
+					JOptionPane.showMessageDialog(btnbuscar, "Cédula no encontrado, mejor cree este registro");
+					tfestado.setText("Elemento no encontrado, rellene y cree el registro");
 				}
-				
+				else {
+
+					if(mng.arrlist.get(indice).esborrado==true) {
+						tfestado.setText("¡Registro eliminado, ingrese datos y presione actualizar!");
+						JOptionPane.showMessageDialog(btnbuscar, "Esta Cedula Ha sido Borrada, si desea ingrese los datos y actualizar el registro");
+					}
+					else {
+						JOptionPane.showMessageDialog(btnbuscar, "Podra visualizar lo buscado de la persona "+mng.arrlist.get(indice).getNombre()+" Con cedula: "+mng.arrlist.get(indice).getIdcedula()+ " , si modifica recuerde guardar con el boton actualizar registro");
+						tfcedula.setText(mng.arrlist.get(indice).getIdcedula());
+						tfnombre.setText(mng.arrlist.get(indice).getNombre());
+						tfapellido.setText(mng.arrlist.get(indice).getApellido());
+						tfdireccion.setText(mng.arrlist.get(indice).getDireccion());
+						tfespecialidad.setText(mng.arrlist.get(indice).getEspecialidad());
+						tfechainiciolabores.setText(mng.arrlist.get(indice).getFechainiciolabor());
+						tfestado.setText("Al modificar algo presione el boton actualizar, sino no haga nada");
+					}
+
+				}
 			}
-			}else {tfestado.setText("archivo no encontrado, rellena el formulario y crea un nuevo registro");}
+			else {tfestado.setText("Archivo no encontrado, rellena el formulario y crea un nuevo registro");
+			JOptionPane.showMessageDialog(btnbuscar, "Archivo no encontrado, rellena el formulario y crea un nuevo registro");
+			}
 			}
 		//finaccion btnbuscar
 			});
