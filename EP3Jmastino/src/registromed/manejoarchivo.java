@@ -111,7 +111,6 @@ public class manejoarchivo {
 						break;
 						}
 						else{scan=-1;
-						
 						}
 				
 				}
@@ -148,7 +147,7 @@ public class manejoarchivo {
 
 			for(int i=0;i<arrlist.size();i++) 
 			{
-				if(arrlist.get(i).getIdcedula().contains(idcedula))
+				if(arrlist.get(i).getIdcedula().equals(idcedula))
 				{
 					scan=i;
 					break;

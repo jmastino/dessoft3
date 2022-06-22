@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.awt.Font;
 
 public class VentanaF extends JFrame {
 
@@ -130,22 +131,14 @@ public class VentanaF extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				manejoarchivo mng = new manejoarchivo();
 				
-				String idcedula= tfcedula.getText();
-				String nombre = tfnombre.getText();
-				String apellido= tfapellido.getText();
-				String	direccion= tfdireccion.getText();
-				String especialidad= tfespecialidad.getText();
-				String fechainiciolabor= tfechainiciolabores.getText();
-				boolean esborrado= true;
-				
-				mng.borradologico(idcedula, nombre, apellido, direccion, especialidad,fechainiciolabor, esborrado);
+				int indice= mng.buscarregistro(tfcedula.getText());
+				mng.arrlist.set(indice,new Medicos(mng.arrlist.get(indice).getIdcedula(),mng.arrlist.get(indice).getNombre(),mng.arrlist.get(indice).getApellido(),mng.arrlist.get(indice).getDireccion(),mng.arrlist.get(indice).getEspecialidad(),mng.arrlist.get(indice).getFechainiciolabor(),true));
 				mng.registrarenarchivo();
-			
-			
-			
+				JOptionPane.showMessageDialog(btneliminar, "Registro Eliminado");
+				tfestado.setText("Registro Eliminado");
 			}
 		});
-		btneliminar.setBounds(279, 78, 145, 23);
+		btneliminar.setBounds(279, 100, 145, 23);
 		contentPane.add(btneliminar);
 		
 		
@@ -172,6 +165,7 @@ public class VentanaF extends JFrame {
 				mng.arrlist.set(indice,new Medicos(tfcedula.getText(),tfnombre.getText(),tfapellido.getText(),tfdireccion.getText(),tfespecialidad.getText(),tfechainiciolabores.getText(),false));
 				mng.registrarenarchivo();
 				JOptionPane.showMessageDialog(btnactualizar, "Registro Actualizado");
+				tfestado.setText("Registro Actualizado");
 			}
 		});
 		btnactualizar.setBounds(279, 52, 145, 23);
@@ -351,8 +345,9 @@ public class VentanaF extends JFrame {
 		contentPane.add(tfapellido);
 		tfapellido.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("LIMPIAR CAMPOS");
-		btnNewButton_1.addKeyListener(new KeyAdapter() {
+		JButton btnlimpiarformulario = new JButton("LIMPIAR FORMULARIO");
+		btnlimpiarformulario.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnlimpiarformulario.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_TAB) {
@@ -360,7 +355,7 @@ public class VentanaF extends JFrame {
 		        }
 			}
 		});
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnlimpiarformulario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tfcedula.setText("");
 				tfnombre.setText("");
@@ -371,8 +366,8 @@ public class VentanaF extends JFrame {
 				tfestado.setText("");
 			}
 		});
-		btnNewButton_1.setBounds(143, 189, 130, 58);
-		contentPane.add(btnNewButton_1);
+		btnlimpiarformulario.setBounds(112, 189, 191, 58);
+		contentPane.add(btnlimpiarformulario);
 	}
 
 
