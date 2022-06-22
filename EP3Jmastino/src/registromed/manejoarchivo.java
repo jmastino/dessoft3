@@ -105,7 +105,7 @@ public class manejoarchivo {
 				
 				for(int i=0;i<arrlist.size();i++) 
 				{  
-					if(arrlist.get(i).getIdcedula().contains(idcedula))
+					if(arrlist.get(i).getIdcedula().equals(idcedula)==true)
 						{
 						scan=i;
 						break;
@@ -128,8 +128,6 @@ public class manejoarchivo {
 		
 		return scan;
 	}
-	
-	
 	
 	/**
 	 * metodo para hacer la operacion de borrado logico
@@ -167,6 +165,10 @@ public class manejoarchivo {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
 	
 	private static void writeString(RandomAccessFile file, String str, int lfld) throws IOException {
 		StringBuffer buffer = new StringBuffer();
