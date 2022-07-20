@@ -74,9 +74,9 @@ public class agrecred extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				ManejoSQL mnj = new ManejoSQL();
 				mnj.creartable();
-				mnj.cli.setIdcedula(tfcedula.toString().replace(" ", ""));
+				mnj.cli.setIdcedula(tfcedula.getText().replace(" ", ""));
 				mnj.buscarcliced(mnj.cli);
-				mnj.agregarcred(ManejoSQL.arrcli.get(0).getSaldos().toString(),tfañadirsaldo.toString(), mnj.cli.getIdcedula());
+				mnj.agregarcred(ManejoSQL.arrcli.get(0).getSaldos().toString(),tfañadirsaldo.getText(), mnj.cli.getIdcedula());
 				JOptionPane.showMessageDialog(btnNewButton, "Se Registro Completamente el nuevo credito");
 				
 			}
@@ -108,7 +108,7 @@ public class agrecred extends JFrame {
 		btnbuscarced.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			ManejoSQL mnj = new ManejoSQL();
-			mnj.cli.setIdcedula(tfcedula.toString().replace(" ", ""));
+			mnj.cli.setIdcedula(tfcedula.getText().replace(" ", ""));
 			
 			mnj.buscarcliced(mnj.cli);
 			tfnombre.setText(ManejoSQL.arrcli.get(0).getNombre());

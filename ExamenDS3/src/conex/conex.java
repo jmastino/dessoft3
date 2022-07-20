@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 public class conex {
 	
-    private static String url = "jdbc:mysql://localhost:3306/";
+    private static String url = "jdbc:mysql://localhost:3306/examends3";
     private static String username = "";
     private static String passwd = "";
     public static Hashtable<String, String> logininformation = new Hashtable<String, String>();

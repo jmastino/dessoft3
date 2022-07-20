@@ -24,6 +24,7 @@ public class agrepago extends JFrame {
 	 * Create the frame.
 	 */
 	public agrepago() {
+		setTitle("Agregar Pago");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -73,9 +74,9 @@ public class agrepago extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			ManejoSQL emp = new ManejoSQL();
 			emp.creartable();
-			emp.cli.setIdcedula(tfcedula.toString());
+			emp.cli.setIdcedula(tfcedula.getText());
 			emp.buscarcliced(emp.cli);
-			emp.agregarpago(ManejoSQL.arrcli.get(0).getSaldos().toString(), tfañadirpago.toString(), tfcedula.getText());
+			emp.agregarpago(ManejoSQL.arrcli.get(0).getSaldos().toString(), tfañadirpago.getText(), tfcedula.getText());
 			JOptionPane.showMessageDialog(btnNewButton, "Su Pago se Registro Completamente");
 			}
 		});
@@ -103,6 +104,19 @@ public class agrepago extends JFrame {
 		tfapellido.setColumns(10);
 		
 		JButton btnbuscarced = new JButton("Mostrar Cliente");
+		btnbuscarced.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ManejoSQL mnj = new ManejoSQL();
+				mnj.cli.setIdcedula(tfcedula.getText().replace(" ", ""));
+				
+				mnj.buscarcliced(mnj.cli);
+				tfnombre.setText(ManejoSQL.arrcli.get(0).getNombre());
+				tfapellido.setText(ManejoSQL.arrcli.get(0).getApellido());
+				tfsaldoant.setText(ManejoSQL.arrcli.get(0).getSaldos().toString());
+				
+			
+			}
+		});
 		btnbuscarced.setBounds(216, 44, 120, 23);
 		contentPane.add(btnbuscarced);
 	}

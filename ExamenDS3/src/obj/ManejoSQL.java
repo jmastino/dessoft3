@@ -3,6 +3,8 @@ package obj;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -29,18 +31,22 @@ public class ManejoSQL {
 	public static ArrayList<clientes> arrcli = new ArrayList<clientes>(); 
 	
 	public Date insertarhora()
-	{  java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-	 return date;
+	{  java.util.Date javaDate = new java.util.Date();
+    java.sql.Date mySQLDate = new java.sql.Date(javaDate.getTime());
+		
+	 return mySQLDate;
 	}
 
 	public boolean buscartable() {
 	//conex.conex.getConnection();
 	boolean b = false;
+	
 String butable="SELECT COUNT(TABLE_NAME)FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'examends3' AND TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'saldos';";
 	try {
-	statement= conex.getConnection().prepareStatement(butable);
+		
+		statement= conex.getConnection().prepareStatement(butable);
 		rs = statement.executeQuery();
-		statement.close();
+		
 		while(rs.next()) {
 			if(rs.getInt("COUNT(TABLE_NAME)")==1) {
 				b=true;
@@ -48,6 +54,7 @@ String butable="SELECT COUNT(TABLE_NAME)FROM information_schema.TABLES WHERE TAB
 			}
 			else {return b;}
 		}
+		statement.close();
 	}catch(Exception e) {
 		JOptionPane.showMessageDialog(null, e,"problema En el 'sql' de busqueda de tabla",0,null);
 	}
@@ -62,7 +69,7 @@ String butable="SELECT COUNT(TABLE_NAME)FROM information_schema.TABLES WHERE TAB
 					+ "  `idcedula` varchar(20) COLLATE utf8_spanish_ci NOT NULL,\r\n"
 					+ "  `nombre` varchar(30) COLLATE utf8_spanish_ci NOT NULL,\r\n"
 					+ "  `apellido` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,\r\n"
-					+ "  `dirección` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,\r\n"
+					+ "  `direccion` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,\r\n"
 					+ "  `telefono` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,\r\n"
 					+ "  `saldos` double DEFAULT NULL,\r\n"
 					+ "  `updated` date DEFAULT NULL,\r\n"
@@ -77,6 +84,7 @@ String butable="SELECT COUNT(TABLE_NAME)FROM information_schema.TABLES WHERE TAB
 			}catch(Exception e) {
 				JOptionPane.showMessageDialog(null, e,"Error en funcion de crear o no la tabla",0,null);
 			}
+			
 		}
 		
 		
@@ -96,30 +104,33 @@ String butable="SELECT COUNT(TABLE_NAME)FROM information_schema.TABLES WHERE TAB
 		arrcli.clear();
 		String ced=cli.getIdcedula().replace(" ", "");
 		cli.setIdcedula(ced);
-		String sql="INSERT INTO `saldos` (idcedula,nombre,apellido,direcion,telefono,saldos,updated,created,esborrado) VALUES(`"+cli.getIdcedula()+"`,`"+cli.getNombre()+"`,`"+cli.getApellido()+"`,`"+cli.getDireccion()+"`,`"+cli.getTelefono()+"`,"+cli.getSaldos()+","+cli.getUpdated()+","+cli.getCreated()+","+false+")";		
+String sql="INSERT INTO `saldos` (idcedula,nombre,apellido,direccion,telefono,saldos,updated,created,esborrado) VALUES('"+cli.getIdcedula()+"','"+cli.getNombre()+"','"+cli.getApellido()+"','"+cli.getDireccion()+"','"+cli.getTelefono()+"',"+cli.getSaldos()+",?,?,false);";		
 
 	try {
+		
 		statement = conex.getConnection().prepareStatement(sql);
+		statement.setDate(1, cli.getUpdated());
+		statement.setDate(2, cli.getCreated());
 		statement.executeUpdate();
-		statement.close();
+		//statement.close();
 	}catch(Exception e) {JOptionPane.showMessageDialog(null,e, "error al insertar cliente",0,null );}
 		
 	}
 
 	public void buscarcliced(clientes cli) {
 		arrcli.clear();
-String sql="SELECT * FROM saldos where idcedula=?";
+		String sql="SELECT * FROM saldos where idcedula=?";
 		
 		try {
 			statement = conex.getConnection().prepareStatement(sql);
 			statement.setString(1, cli.getIdcedula().toString());
 			rs= statement.executeQuery();
-			statement.close();
+			
 			
 			while(rs.next()) {
 				arrcli.add(new clientes(rs.getString("idcedula"),rs.getString("nombre"),rs.getString("apellido"),rs.getString("direccion"),rs.getString("telefono"),rs.getDouble("saldos"),rs.getDate("updated"),rs.getDate("created"),rs.getBoolean("esborrado")));
 			}
-			
+			statement.close();
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null, e,"error al buscar entrada de cliente",0,null);
 		}
@@ -129,9 +140,10 @@ String sql="SELECT * FROM saldos where idcedula=?";
 		Double saldoanterior2 =Double.parseDouble(saldoanterior);
 		Double saldonuevo2= Double.parseDouble(saldonuevo);
 		Double suma = saldoanterior2+saldonuevo2;
-		String sql= "UPDATE `saldos` SET saldos="+suma+"[WHERE cedula="+idcedula+"]";
+		String sql= "UPDATE saldos SET saldos="+suma+",updated =? WHERE idcedula='"+idcedula+"';";
 		try {
 		statement = conex.getConnection().prepareStatement(sql);
+		statement.setDate(1, insertarhora());
 		statement.executeUpdate();
 		statement.close();
 		}catch(Exception e) {
@@ -143,11 +155,14 @@ String sql="SELECT * FROM saldos where idcedula=?";
 	
 	public void agregarpago(String saldoanterior,String saldonuevo,String idcedula) {
 		Double saldoanterior2 =Double.parseDouble(saldoanterior);
-		Double saldonuevo2= Double.parseDouble(saldonuevo);
+		Double saldonuevo2 =Double.parseDouble(saldonuevo);
 		Double resta = saldoanterior2-saldonuevo2;
-		String sql= "UPDATE `saldos` SET saldos="+resta+"[WHERE cedula="+idcedula+"]";
+		System.out.println(resta);
+		String sql= "UPDATE saldos SET saldos=?,updated =? WHERE idcedula='"+idcedula+"';";
 		try {
 			statement = conex.getConnection().prepareStatement(sql);
+			statement.setDouble(1, resta);
+			statement.setDate(2, insertarhora());
 			statement.executeUpdate();
 			statement.close();
 			}catch(Exception e) {

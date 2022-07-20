@@ -10,7 +10,7 @@ public class clientes {
 	String apellido;
 	String direccion;
 	String telefono;
-	Double saldos=0.00d;
+	Double saldos;
 	Date updated;
 	Date created;
 	boolean esborrado=false;
@@ -20,7 +20,7 @@ public class clientes {
 	
 	
 	
-	public clientes(String idcedula, String nombre, String apellido, String direccion, String telefono, double saldos,
+	public clientes(String idcedula, String nombre, String apellido, String direccion, String telefono, Double saldos,
 			Date updated, Date created, boolean esborrado) {
 		// TODO Auto-generated constructor stub
 		this.idcedula=idcedula;

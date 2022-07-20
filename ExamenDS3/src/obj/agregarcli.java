@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -82,23 +83,42 @@ public class agregarcli extends JFrame {
 		JButton btnNewButton = new JButton("Agregar Cliente");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				ManejoSQL mnj = new ManejoSQL();
 				
-				mnj.cli.setIdcedula(mnj.truncar(tfcedula.toString().replace(" ", ""), 20));
-				mnj.cli.setNombre(mnj.truncar(tfnombre.toString(), 30));
-				mnj.cli.setApellido(mnj.truncar(tfapellido.toString(), 30));
-				mnj.cli.setDireccion(mnj.truncar(tfdireccion.toString(), 30));
-				mnj.cli.setTelefono(mnj.truncar(tftelefono.toString(),30));
-				mnj.cli.setSaldos(0d);
+				mnj.cli.setIdcedula(mnj.truncar(tfcedula.getText().replace(" ", ""), 20));
+				mnj.cli.setNombre(mnj.truncar(tfnombre.getText(), 30));
+				mnj.cli.setApellido(mnj.truncar(tfapellido.getText(), 30));
+				mnj.cli.setDireccion(mnj.truncar(tfdireccion.getText(), 30));
+				mnj.cli.setTelefono(mnj.truncar(tftelefono.getText(), 30));
+				mnj.cli.setSaldos(0.00);
 				mnj.cli.setUpdated(mnj.insertarhora());
 				mnj.cli.setCreated(mnj.insertarhora());
 				mnj.cli.setEsborrado(false);
 				mnj.creartable();
+				
+				
+				
+				
 				mnj.agregarcli(mnj.cli);
+				JOptionPane.showMessageDialog(btnNewButton, "Se registro el Cliente", "Se ha insertado su cliente", 1, null);
 			}
 		});
 		btnNewButton.setBounds(239, 50, 127, 37);
 		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Limpiar Todo");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			tfapellido.setText("");
+			tfcedula.setText("");
+			tfdireccion.setText("");
+			tfnombre.setText("");
+			tftelefono.setText("");
+			}
+		});
+		btnNewButton_1.setBounds(239, 137, 127, 23);
+		contentPane.add(btnNewButton_1);
 	}
 
 	
