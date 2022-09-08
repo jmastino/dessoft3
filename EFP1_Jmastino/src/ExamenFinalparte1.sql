@@ -40,7 +40,7 @@ CREATE TABLE `miembros2` (
 
 LOCK TABLES `miembros2` WRITE;
 /*!40000 ALTER TABLE `miembros2` DISABLE KEYS */;
-INSERT INTO `miembros2` VALUES ('1-345-3524','Noriel','Gonzalez',180,1.75),('4-781-1309','Jordy','Mastino',120,1.66),('4-832-1523','Maelys','Mastino',125,1.5),('5-239-325','Adelina','Carrera',115,1.7),('8-234-1255','Alfonso','Cerceño',200,1.69);
+INSERT INTO `miembros2` VALUES ('1-345-3524','Noriel','Gonzalez',180,1.75),('5-239-325','Adelina','Carrera',115,1.7),('8-234-1255','Alfonso','Cerceño',200,1.69);
 /*!40000 ALTER TABLE `miembros2` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
